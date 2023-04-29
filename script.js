@@ -53,6 +53,8 @@ function showNewRecordMessage() {
 
 
 function saveResult(timeDifference) {
+  checkNewRecord(timeDifference); // Mueve esta línea al principio de la función
+
   const results = JSON.parse(localStorage.getItem("keypressResults")) || [];
   const date = new Date();
   const formattedDate = `${date.getDate()}/${
@@ -66,8 +68,8 @@ function saveResult(timeDifference) {
 
   localStorage.setItem("keypressResults", JSON.stringify(results));
   displayResults();
-  checkNewRecord(timeDifference);
 }
+
 
 document.addEventListener("keydown", (event) => {
   const currentTime = new Date().getTime();
