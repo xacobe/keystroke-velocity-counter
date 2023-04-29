@@ -1,4 +1,5 @@
 let lastKeypressTime = null;
+let saveNextKeypress = true;
 
 function displayResults() {
   const results = JSON.parse(localStorage.getItem("keypressResults")) || [];
@@ -23,6 +24,33 @@ function displayResults() {
     resultsTbody.appendChild(tr);
   });
 }
+function checkNewRecord(timeDifference) {
+  const results = JSON.parse(localStorage.getItem("keypressResults")) || [];
+
+  if (results.length === 0) {
+    showNewRecordMessage();
+  } else {
+    const minTime = Math.min(...results.map((result) => result.timeDifference));
+    if (timeDifference < minTime) {
+      showNewRecordMessage();
+    }
+  }
+}
+
+function showNewRecordMessage() {
+  const newRecordElement = document.createElement("p");
+  newRecordElement.id = "new-record";
+  newRecordElement.innerText = "Nuevo record";
+  newRecordElement.style.color = "red";
+
+  const infoElement = document.getElementById("info");
+  infoElement.appendChild(newRecordElement);
+
+  setTimeout(() => {
+    infoElement.removeChild(newRecordElement);
+  }, 3000);
+}
+
 
 function saveResult(timeDifference) {
   const results = JSON.parse(localStorage.getItem("keypressResults")) || [];
@@ -38,6 +66,7 @@ function saveResult(timeDifference) {
 
   localStorage.setItem("keypressResults", JSON.stringify(results));
   displayResults();
+  checkNewRecord(timeDifference);
 }
 
 document.addEventListener("keydown", (event) => {
@@ -49,10 +78,21 @@ document.addEventListener("keydown", (event) => {
       "result"
     ).innerText = `Diferencia en milisegundos: ${timeDifference} ms`;
 
-    saveResult(timeDifference);
+    if (saveNextKeypress) {
+      saveResult(timeDifference);
+    }
+    saveNextKeypress = !saveNextKeypress;
   }
 
   lastKeypressTime = currentTime;
 });
+function clearResults() {
+  localStorage.removeItem("keypressResults");
+  displayResults();
+}
+
+document
+  .getElementById("clear-results")
+  .addEventListener("click", clearResults);
 
 displayResults();
