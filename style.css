@@ -1,0 +1,34 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+#info {
+    text-align: center;
+}
+
+#table-container {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
